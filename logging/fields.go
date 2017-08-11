@@ -17,13 +17,14 @@
 package logging
 
 import (
-	"github.com/kardianos/osext"
 	"os"
 	"path"
 	"runtime"
 	"strings"
 	"sync/atomic"
 	"time"
+
+	"github.com/kardianos/osext"
 )
 
 // The struct for each log record
@@ -173,6 +174,16 @@ func (logger *Logger) created(r *record) interface{} {
 
 // RFC3339Nano time
 func (logger *Logger) time(r *record) interface{} {
+	timeParts := strings.Split(logger.timeFormat, "Loc:")
+	if len(timeParts) == 2 {
+		zone, err := time.LoadLocation(timeParts[1])
+		if err != nil {
+			return r.time.Format(logger.timeFormat)
+		}
+
+		return r.time.In(zone).Format(timeParts[0])
+	}
+
 	return r.time.Format(logger.timeFormat)
 }
 

@@ -29,13 +29,14 @@
 package logging
 
 import (
-	"github.com/ccding/go-config-reader/config"
 	"io"
 	"os"
 	"strconv"
 	"sync"
 	"sync/atomic"
 	"time"
+
+	"github.com/ccding/go-config-reader/config"
 )
 
 // Pre-defined formats
